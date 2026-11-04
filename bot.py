@@ -30,7 +30,7 @@ async def start(message: Message):
     credits = await db.ensure_user(message.from_user.id)
     await message.answer(
         "Привет! Отправь фотографию, а затем подробно напиши, что нужно изменить.\n\n"
-        f"Твой баланс: {credits} генераций "
+        f"Твой баланс: {credits} генераций\n"
         "/balance — баланс\n/buy — купить генерации\n/cancel — отменить"
     )
 
@@ -56,7 +56,7 @@ async def receive_photo(message: Message):
         return
 
     user_photos[user_id] = photo_bytes
-    await message.answer("Фото получено! Теперь напиши, что изменить.")
+    await message.answer("Фото получено! Теперь подробно напиши, что изменить (минимум 5 слов).")
 
 
 # Команды (/buy и т.д.) сюда не попадают благодаря фильтру

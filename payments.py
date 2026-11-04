@@ -24,7 +24,7 @@ def packs_keyboard() -> InlineKeyboardMarkup:
     rows = [
         [
             InlineKeyboardButton(
-                text=f"{p.credits} генераций — {p.stars} ⭐",
+                text=f"{p.credits} {_credits_word(p.credits)} — {p.stars} ⭐",
                 callback_data=f"buy:{p.id}",
             )
         ]
@@ -33,10 +33,22 @@ def packs_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
+def _credits_word(n: int) -> str:
+    n = abs(n) % 100
+    if 11 <= n <= 14:
+        return "генераций"
+    last = n % 10
+    if last == 1:
+        return "генерация"
+    if 2 <= last <= 4:
+        return "генерации"
+    return "генераций"
+
+
 @router.message(Command("balance"))
 async def balance(message: Message):
     credits = await db.ensure_user(message.from_user.id)
-    await message.answer(f"Твой баланс: {credits} генераций.\n/buy — пополнить")
+    await message.answer(f"Твой баланс: {credits} {_credits_word(credits)}.\n/buy — пополнить")
 
 
 @router.message(Command("buy"))
@@ -88,7 +100,7 @@ async def paid(message: Message):
         # Деньги получены, а пакет неизвестен — сообщаем админам, не теряем charge_id
         logger.error("Оплата неизвестного пакета: %s", sp)
         await message.answer(
-            "Платёж получен, но возникла ошибка. Напиши /paysupport"
+            "Платёж получен, но возникла ошибка."
         )
         return
 
@@ -109,14 +121,7 @@ async def paid(message: Message):
     )
 
 
-@router.message(Command("paysupport"))
-async def pay_support(message: Message):
-    # Telegram требует, чтобы бот с платежами отвечал на эту команду
-    await message.answer(
-        "Проблемы с оплатой? Напиши администратору и приложи ID платежа "
-        "(он есть в чеке Telegram). Возврат Stars возможен, если "
-        "генерации не использованы."
-    )
+
 
 
 @router.message(Command("terms"))
@@ -124,7 +129,7 @@ async def terms(message: Message):
     await message.answer(
         "Условия: оплата в Telegram Stars, 1 генерация = 1 обработка фото. "
         "Если обработка не удалась, генерация возвращается на баланс. "
-        "Неиспользованные генерации можно вернуть через /paysupport."
+        
     )
 
 

@@ -13,7 +13,7 @@ MODEL_ID = os.getenv("PROBLEMBO_MODEL_ID", "gpt-image")
 API_BASE = "https://problembo.com/apis/v1/client"
 
 DB_PATH = os.getenv("DB_PATH", "bot.db")
-FREE_GENERATIONS = int(os.getenv("FREE_GENERATIONS", "1"))
+FREE_GENERATIONS = int(os.getenv("FREE_GENERATIONS", "0"))
 
 ADMIN_IDS = {
     int(x) for x in os.getenv("ADMIN_IDS", "").replace(" ", "").split(",") if x
@@ -32,7 +32,7 @@ PACKS = {
     p.id: p
     for p in (
         Pack("p5", 1, 20),
-        Pack("p20", 20, 160),
+        Pack("p20", 10, 180),
         Pack("p50", 50, 350),
     )
 }
