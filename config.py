@@ -31,7 +31,7 @@ class Pack:
 PACKS = {
     p.id: p
     for p in (
-        Pack("p5", 1, 10),
+        Pack("p5", 1, 20),
         Pack("p20", 20, 160),
         Pack("p50", 50, 350),
     )
